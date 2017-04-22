@@ -86,6 +86,17 @@ function init(app, User) {
             }
         })
     })
+
+    app.post('/auth/delete', function (err, result) {
+        User.findOneAndRemove({_id : req.session._id}, function (err, result) {
+            if(err){
+                console.log("/auth/delete failed");
+                res.send(401, result);
+                throw err;
+            }
+            res.send(200, result);
+        })
+    })
 }
 
 module.exports = init;
