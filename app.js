@@ -47,7 +47,7 @@ var ArticleSchema = new schema({
     title : String,
     date : String,
     content : String,
-    user_cnt : Number,
+    views : Number,
     recommend : Number,
     writer : String
 });

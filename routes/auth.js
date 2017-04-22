@@ -44,6 +44,7 @@ function init(app, User) {
                 else if (req.param('id') != undefined && result.password == req.param('password')) {
                     console.log("User " + result.name + "Logged In");
                     req.session._id = result._id;
+                    req.session.name = result.name;
                     res.send(200, result);
                 }
                 else if (result.password != req.param('password')) {
