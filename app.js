@@ -38,8 +38,7 @@ var StockSchema = new schema({
     name : String,
     current_val : String,
     yesterday_val : String,
-    diff_percentage : String,
-    chat : String
+    diff_percentage : String
 });
 
 var ArticleSchema = new schema({
