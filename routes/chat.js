@@ -19,7 +19,7 @@ function init(app, User, Stock) {
             socket.on('add user', function (username) {
                 if (addedUser) return;
 
-                socket.username = username;
+                socket.username = req.session.name;
                 ++numUsers;
                 addedUser = true;
                 socket.emit('login', {

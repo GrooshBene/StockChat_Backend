@@ -4,6 +4,7 @@
 
 function init(app, User) {
     var randomString = require('randomstring');
+    var mailer = require('nodemailer');
     app.post('/auth/register', function (req, res) {
         var user = new User({
             _id : randomString.generate(13),
