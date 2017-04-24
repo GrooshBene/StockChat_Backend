@@ -4,7 +4,24 @@
 
 function init(app, User) {
     var randomString = require('randomstring');
-    var mailer = require('nodemailer');
+    var mailer = require('nodemailer'); 
+
+    function mail_init(id, password){
+        var smtpTransport = mailer.createTransport("SMTP",{
+            service : "Gmail",
+            auth : {
+                user : id,
+                pass : password
+            }
+        });
+
+        return smtpTransport;
+    }
+
+    function mail_auth(reciever){
+        //code here
+    }
+
     app.post('/auth/register', function (req, res) {
         var user = new User({
             _id : randomString.generate(13),
