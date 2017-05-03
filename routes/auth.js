@@ -33,6 +33,29 @@ function init(app, User) {
         return token;
     }
 
+    function mail_send(reciever, id, password, content){
+        var smtpTransport = mailer.createTransport("SMTP", {
+            service : "Gmail",
+            auth : {
+                user : id,
+                pass : password
+            }
+        });
+        var mailOptions = {
+            from : "아이디/비밀번호 복구 <StockChat>",
+            to : reciever,
+            subject : 'StockChat 아이디/비밀번호 인증 메일입니다',
+            text : content
+        }
+        smtpTransport.sendMail(mailOptions, function(err, result){
+            if(err){
+                console.log("mail_send error");
+                throw err;
+            }
+            console.log("Mail Sended : " + result);
+        });
+    }
+
     app.post('/auth/register', function (req, res) {
         var user = new User({
             _id : randomString.generate(13),
@@ -114,7 +137,7 @@ function init(app, User) {
                 throw err;
             }
             if(result){
-                //code here
+                mail_send(req.param('email'), 'wltn9247', 'wltn6705', result.id);
             }
         })
     })
@@ -128,7 +151,7 @@ function init(app, User) {
                 throw err;
             }
             if(result){
-                //code here
+                mail_send(req.param('email'), 'wltn9247', 'wltn6705', result.password);
             }
         })
     })
