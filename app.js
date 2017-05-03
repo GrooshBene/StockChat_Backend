@@ -73,6 +73,10 @@ var Stock = mongoose.model('stock', StockSchema);
 var Article = mongoose.model('article', ArticleSchema);
 var Message = mongoose.model('message', MessengerSchema);
 
+require('./routes/auth.js')(app, User);
+require('./routes/board.js')(app, Article, User);
+require('./routes/chat.js')(app, User, Stock);
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
