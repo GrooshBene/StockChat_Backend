@@ -6,7 +6,9 @@ function init(app, User) {
     var randomString = require('randomstring');
     var mailer = require('nodemailer'); 
 
-    function mail_init(id, password){
+    function mail_auth(reciever, id, password){
+        //code here
+        var token = randomString.generate(16);
         var smtpTransport = mailer.createTransport("SMTP",{
             service : "Gmail",
             auth : {
@@ -14,12 +16,21 @@ function init(app, User) {
                 pass : password
             }
         });
+        var mailOptions = {
+            from : '회원가입 <StockChat>',
+            to : reciever,
+            subject : 'StockChat 회원가입 인증 메일입니다.',
+            text : token
+        }
+        smtpTransport.sendMail(mailOptions, function(err, result){
+            if(err){
+                console.log("mail_auth error");
+                throw err;
+            }
+            console.log("Mail Sended : " + result);
+        })
 
-        return smtpTransport;
-    }
-
-    function mail_auth(reciever){
-        //code here
+        return token;
     }
 
     app.post('/auth/register', function (req, res) {
@@ -46,6 +57,22 @@ function init(app, User) {
         });
     });
 
+    app.post('/auth/register/mail', function(req, res){
+        var mail_token = mail_auth(req.param('email'), 'wltn9247', 'wltn6705');
+        if(mail_token == req.param('token')){
+            res.send(200, {
+                result : true
+            });
+            console.log("User " + email + " has authenticated");
+        }
+        else if(mail_token != req.param('token')){
+            res.send(401, {
+                result : false
+            });
+            console.log("User " + email + " authenticate Fail");
+        }
+    });
+
     app.post('/auth', function (req, res) {
         console.log("User Login : " + req.param('id'));
         User.findOne({id : req.param('id')}, function (err, result) {
@@ -53,6 +80,7 @@ function init(app, User) {
             if(err){
                 console.log("/auth/local/login failed");
                 throw err;
+                
             }
             if(result) {
                 if (req.param('id') == undefined) {
