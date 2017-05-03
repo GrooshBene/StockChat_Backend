@@ -118,17 +118,17 @@ function init(app, User) {
                 }
                 else if (result.password != req.param('password')) {
                     console.log("Password Error!");
-                    res.send(400, "Access Denied");
+                    res.send(401, "Access Denied");
                 }
             }
             else{
                 console.log("Can't Find User Data");
-                res.send(400, "Cant't Find User Data");
+                res.send(403, "Cant't Find User Data");
             }
         })
     })
 
-    app.post('/auth/find/id', function (req, res) {
+    app.post('/auth/find/id' , function (req, res) {
         //needs email sender
         User.findOne({email : req.param('email')}, function (err, result) {
             console.log("DB Founded : " + result);
