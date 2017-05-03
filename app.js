@@ -11,7 +11,7 @@ var users = require('./routes/users');
 
 var app = express();
 
-var schema = mongoose.Schema();
+var schema = mongoose.Schema;
 
 var UserSchema = new schema({
   _id : String,
