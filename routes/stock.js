@@ -6,7 +6,7 @@ function init(app, User, Stock){
     app.post('/stock/search/:id', function(req, res){
         var date = new Date();
         googleFinance.historical({
-            symbol : "NASDAQ:AAPL",
+            symbol : req.param('id'),
             from : date.setDate(date.getDate()-1),
             to : date
         }, function(err, quotes){
