@@ -55,6 +55,14 @@ function init(app, User, Stock) {
             });
         });
     })
+
+	app.get('/keyboard', function(req, res){
+		var keyboard = {
+			"type" : "buttons",
+			"buttons" : ["주식정보", "주톡으로 연결"]
+		}
+		res.send(200, keyboard);
+	})
 }
 
 module.exports = init;
