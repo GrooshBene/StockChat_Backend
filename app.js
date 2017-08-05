@@ -69,14 +69,14 @@ mongoose.connect("mongodb://localhost:27017/stockchat", function (err) {
 });
 
 var User = mongoose.model('users', UserSchema);
-var Stock = mongoose.model('stock', StockSchema);
+var Stock = mongoose.model('stock', StockSchema, 'stock');
 var Article = mongoose.model('article', ArticleSchema);
 var Message = mongoose.model('message', MessengerSchema);
 
 require('./routes/auth.js')(app, User);
 require('./routes/board.js')(app, Article, User);
 require('./routes/chat.js')(app, User, Stock);
-require('./route/stock.js')(app, User, Stock);
+require('./routes/stock.js')(app, User, Stock);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

@@ -98,7 +98,7 @@ function init(app, User, Stock) {
         else if(_obj.content == "주톡으로 연결"){
             res.set({
         'content-type': 'application/json'
-    }).send(JSON.stringify(message2))~~~~~
+    }).send(JSON.stringify(message2))
         }
 
     })
