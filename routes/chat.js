@@ -64,7 +64,45 @@ function init(app, User, Stock) {
 		res.set({
 			'content-type' : 'application/json'
 		}).send(JSON.stringify(keyboard));
-	})
+    })
+    app.post('/message', function(req, res){
+        const _obj = {
+            user_key : req.body.user_key,
+            type : req.body.type,
+            content : req.body.content
+        };
+        let message1 = {
+            "message" : {
+                "text" : "주식 정보입니다."
+            },
+            "keyboard" : {
+                type : 'buttons',
+                buttons : ["주식정보", "주톡으로 연결", "돌아가기"]
+            }
+        };
+        let message2 = {
+            "message" : {
+                "label" : "주톡 홈페이지로 이동합니다.",
+                "url" : "http://zootalk.com"
+            },
+            "keyboard" : {
+                type : 'buttons',
+                buttons : ["주식정보", "주톡으로 연결", "돌아가기"]
+            }
+        };
+
+        if(_obj.content == "주식정보"){
+            res.set({
+        'content-type': 'application/json'
+    }).send(JSON.stringify(message1));
+        }
+        else if(_obj.content == "주톡으로 연결"){
+            res.set({
+        'content-type': 'application/json'
+    }).send(JSON.stringify(message2))
+        }
+
+    })
 }
 
 module.exports = init;
