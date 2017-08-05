@@ -67,7 +67,6 @@ function init(app, User, Stock) {
     })
     app.post('/message', function(req, res){
         const _obj = {
-            user_key : req.body.user_key,
             type : req.body.type,
             content : req.body.content
         };
@@ -99,7 +98,7 @@ function init(app, User, Stock) {
         else if(_obj.content == "주톡으로 연결"){
             res.set({
         'content-type': 'application/json'
-    }).send(JSON.stringify(message2))
+    }).send(JSON.stringify(message2))~~~~~
         }
 
     })
