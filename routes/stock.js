@@ -19,7 +19,7 @@ function init(app, User, Stock){
 //        })
 //    });
 	app.post('/stock/search/:name', function(req, res){
-		Stock.find({ title : req.param('name')}, function(err, result){
+		Stock.findOne({ title : req.param('name')}, function(err, result){
 			if(err){
 				res.send(401, "DB Error");
 				throw err;
@@ -27,6 +27,17 @@ function init(app, User, Stock){
 			console.log(result);
 			res.send(200, result)
 		})
-	})
+	});
+
+	app.post('/stock/list', function(req, res){
+		Stock.find({}, function(err, result){
+			if(err){
+				res.send(401, "DB Error");
+				throw err;
+			}
+			console.log(result);
+			res.send(200, result);
+		});
+	});
 }
 module.exports = init;
