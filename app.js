@@ -36,10 +36,11 @@ var UserSchema = new schema({
 var StockSchema = new schema({
   _id : String,
     code : String,
-    name : String,
+    title : String,
     current_val : String,
     yesterday_val : String,
     diff_percentage : String,
+    up_down : String,
     chat : String
 });
 

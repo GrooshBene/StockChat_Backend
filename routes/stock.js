@@ -2,7 +2,7 @@
  * Created by GrooshBene on 2017-04-22.
  */
 function init(app, User, Stock){
-    var googleFinance = require('google-finance');
+	var request = require("request");
 //    app.post('/stock/search/:id', function(req, res){
 //        var date = new Date();
 //        googleFinance.historical({
@@ -19,14 +19,30 @@ function init(app, User, Stock){
 //        })
 //    });
 	app.post('/stock/search/:name', function(req, res){
-		Stock.findOne({ title : req.param('name')}, function(err, result){
+		Stock.findOne({ title : req.param('name')}, {}, {new : true}, function(err, result){
 			if(err){
 				res.send(401, "DB Error");
 				throw err;
 			}
-			console.log(result);
-			res.send(200, result)
-		})
+			// console.log(result);
+			// res.send(200, result)
+			request("http://polling.finance.naver.com/api/realtime.nhn?query=SERVICE_ITEM:" + result.code, function(err, response, body){
+				var _obj = JSON.parse(body).result.areas[0].datas[0];
+				result.current_val = _obj.nv;
+				result.yesterday_val = _obj.sv;
+				if(_obj.nv > _obj.sv){
+					result.up_down = "up";
+				}
+				else if(_obj.nv < _obj.sv){
+					result.up_down = "down";
+				}
+				result.diff_percentage = _obj.cr;
+				chat = "";
+				result.save(function(err){
+					res.send(200, result);
+				})
+			});
+		});
 	});
 
 	app.post('/stock/list', function(req, res){
