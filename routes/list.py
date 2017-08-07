@@ -3,7 +3,7 @@ import bs4
 from pymongo import MongoClient
 import random
 import string
-
+import requests, json
 
 print "Updating.. Just wait a second!"
 
@@ -23,22 +23,47 @@ kosdaq_url = 'http://finance.daum.net/quote/all.daum?type=U&stype=Q'
 
 kosdaq_dic = get_company_list(kosdaq_url)
 for k,v in kosdaq_dic.items():
+    res = requests.get("http://polling.finance.naver.com/api/realtime.nhn?query=SERVICE_ITEM:" + v)
+    obj = res.json()
+    data = obj['result']['areas'][0]['datas'][0]
+#    print data['nm']
+    if data['nv'] > data['sv']:
+        up_down = "up"
+    elif data['nv'] < data['sv']:
+        up_down = "down"
     stock = {
                 "title" : k,
-                "code" : v
+                "code" : v,
+                "current_val" : data['nv'],
+                "yesterday_val" : data['sv'],
+                "up_down" : up_down,
+                "diff_percentage" : data['cr']
             }
-    collection.insert(stock)
+    collection.update({"code" : v}, stock, upsert = True);
     print ".",
 
 print "Kosdaq List Update Done!"
 
 kospi_dic = get_company_list(kospi_url)
 for k,v in kospi_dic.items():
+    res = requests.get("http://polling.finance.naver.com/api/realtime.nhn?query=SERVICE_ITEM:" + v)
+    obj = res.json()
+    data = obj['result']['areas'][0]['datas'][0]
+#    print data['nm']
+    if data['nv'] > data['sv']:
+        up_down = "up"
+    elif data['nv'] < data['sv']:
+        up_down = "down"
     stock = {
                 "title" : k,
-                "code" : v
-    }
-    collection.insert(stock)
+                "code" : v,
+                "current_val" : data['nv'],
+                "yesterday_val" : data['sv'],
+                "up_down" : up_down,
+                "diff_percentage" : data['cr']
+            }
+    collection.update({"code" : v}, stock, upsert = True);
+
     print ".",
 
 print "Kospi List Update Done!"

@@ -3,6 +3,7 @@
  */
 function init(app, User, Stock){
 	var request = require("request");
+	var pythonshell = require("python-shell");
 //    app.post('/stock/search/:id', function(req, res){
 //        var date = new Date();
 //        googleFinance.historical({
@@ -18,6 +19,14 @@ function init(app, User, Stock){
 //            res.send(200, quotes);
 //        })
 //    });
+	setInterval(function(){
+		pythonshell.run('./list.py', function(err){
+			if(err){
+				throw err;
+			}
+			console.log("Update Finished");
+		})
+	}, 60000)
 	app.post('/stock/search/:name', function(req, res){
 		Stock.findOne({ title : req.param('name')}, {}, {new : true}, function(err, result){
 			if(err){
@@ -25,7 +34,6 @@ function init(app, User, Stock){
 				throw err;
 			}
 			// console.log(result);
-			// res.send(200, result)
 			request("http://polling.finance.naver.com/api/realtime.nhn?query=SERVICE_ITEM:" + result.code, function(err, response, body){
 				var _obj = JSON.parse(body).result.areas[0].datas[0];
 				result.current_val = _obj.nv;
@@ -42,7 +50,7 @@ function init(app, User, Stock){
 					res.send(200, result);
 				})
 			});
-		});
+			});
 	});
 
 	app.post('/stock/list', function(req, res){
