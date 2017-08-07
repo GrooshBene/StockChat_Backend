@@ -5,6 +5,7 @@ import random
 import string
 import requests, json
 
+
 print "Updating.. Just wait a second!"
 
 client = MongoClient('localhost', 27017)
@@ -31,6 +32,7 @@ for k,v in kosdaq_dic.items():
         up_down = "up"
     elif data['nv'] < data['sv']:
         up_down = "down"
+
     stock = {
                 "title" : k,
                 "code" : v,
