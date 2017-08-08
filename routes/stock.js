@@ -19,14 +19,14 @@ function init(app, User, Stock){
 //            res.send(200, quotes);
 //        })
 //    });
-	setInterval(function(){
-		pythonshell.run('./list.py', function(err){
-			if(err){
-				throw err;
-			}
-			console.log("Update Finished");
-		})
-	}, 60000)
+	// setInterval(function(){
+	// 	pythonshell.run('./list.py', function(err){
+	// 		if(err){
+	// 			throw err;
+	// 		}
+	// 		console.log("Update Finished");
+	// 	})
+	// }, 60000)
 	app.post('/stock/search/:name', function(req, res){
 		Stock.findOne({ title : req.param('name')}, {}, {new : true}, function(err, result){
 			if(err){
@@ -61,6 +61,22 @@ function init(app, User, Stock){
 			}
 			console.log(result);
 			res.send(200, result);
+		});
+	});
+
+	app.post('/stock/query', function(req, res){
+		var data = [];
+		Stock.find({}, function(err, result){
+			if(err){
+				res.send(401, "DB Error");
+				throw err;
+			}
+			for(var i=0; i < result.length; i++){
+				if (result[i].title.indexOf(req.param('query')) != -1) {
+                	data.push(result[i]);
+            	}
+			}
+			res.send(200, data);
 		});
 	});
 }
