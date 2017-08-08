@@ -7,10 +7,10 @@ function init(app, Article, User) {
     app.post('/board/add', function (req, res) {
         var article = new Article({
             _id : randomString.generate(13),
-            writer : session.name,
+            writer : req.param('id'),
             content : req.param('content'),
             title : req.param('title'),
-            date : new Date.toString(),
+            date : new Date,
             views : 0,
             recommend : 0
         });
@@ -33,7 +33,7 @@ function init(app, Article, User) {
                 res.send(401, result);
                 throw err;
             }
-            req.send(200, result);
+            res.send(200, result);
         });
     });
 
@@ -60,7 +60,7 @@ function init(app, Article, User) {
     });
 
     app.post('/board/scrap/:id', function (req, res) {
-        User.update({_id : res.session._id}, {$push : {scrap : req.param('id')}}).exec(function (err, result) {
+        User.update({_id : req.param('id')}, {$push : {scrap : req.param('id')}}).exec(function (err, result) {
             if(err){
                 console.log("/board/scrap/:id failed");
                 res.send(401, result);
