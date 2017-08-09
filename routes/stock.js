@@ -19,14 +19,14 @@ function init(app, User, Stock){
 //            res.send(200, quotes);
 //        })
 //    });
-	setInterval(function(){
-		pythonshell.run('./list.py', function(err){
+/*	setInterval(function(){
+		pythonshell.run('list.py', function(err){
 			if(err){
 				throw err;
 			}
 			console.log("Update Finished");
 		})
-	}, 60000)
+	}, 60000)*/
 	app.post('/stock/search/:name', function(req, res){
 		Stock.findOne({ title : req.param('name')}, {}, {new : true}, function(err, result){
 			if(err){
