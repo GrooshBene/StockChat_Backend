@@ -5,6 +5,7 @@ import random
 import string
 import requests, json
 
+
 print "Updating.. Just wait a second!"
 
 client = MongoClient('localhost', 27017)
@@ -31,6 +32,7 @@ for k,v in kosdaq_dic.items():
         up_down = "up"
     elif data['nv'] < data['sv']:
         up_down = "down"
+
     stock = {
                 "title" : k,
                 "code" : v,
@@ -39,7 +41,7 @@ for k,v in kosdaq_dic.items():
                 "up_down" : up_down,
                 "diff_percentage" : data['cr']
             }
-    collection.update({"code" : v}, stock, upsert = True);
+    collection.update({"code" : v}, stock, upsert = True)
     print ".",
 
 print "Kosdaq List Update Done!"
@@ -62,7 +64,7 @@ for k,v in kospi_dic.items():
                 "up_down" : up_down,
                 "diff_percentage" : data['cr']
             }
-    collection.update({"code" : v}, stock, upsert = True);
+    collection.update({"code" : v}, stock, upsert = True)
 
     print ".",
 
