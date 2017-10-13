@@ -52,7 +52,11 @@ var ArticleSchema = new schema({
     content : String,
     user_cnt : Number,
     recommend : Number,
-    writer : String
+    writer : String,
+    reported : [{
+      type : String,
+        ref : 'users'
+    }]
 });
 
 var MessengerSchema = new schema({
@@ -79,6 +83,7 @@ require('./routes/auth.js')(app, User);
 require('./routes/board.js')(app, Article, User);
 require('./routes/chat.js')(app, User, Stock);
 require('./routes/stock.js')(app, User, Stock);
+require('./routes/admin.js')(app, User, Article);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

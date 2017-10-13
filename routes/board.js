@@ -80,6 +80,17 @@ function init(app, Article, User) {
             res.send(200, result);
         })
     })
+
+    app.post('/board/report/:id', function (req, res) {
+        Article.findOneAndUpdate({_id : req.param('id')}, {$push : {reported : req.param('user_id')}}, {new : true}).exec(function (err, result) {
+            if(err){
+                console.log("/board/report/:id failed");
+                res.send(401, result);
+                throw err;
+            }
+            res.send(200, result);
+        });
+    });
 }
 
 module.exports = init;
